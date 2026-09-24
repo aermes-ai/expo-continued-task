@@ -1,0 +1,32 @@
+name: publish
+# Publishes to npm when a version tag (v1.2.3) is pushed, with npm Trusted Publishing: GitHub's
+# OIDC token proves the run came from this repo and workflow, so no npm token or 2FA code is
+# stored anywhere, and the package gets a provenance attestation.
+# One-time setup on npmjs.com: package settings → Trusted Publisher → GitHub Actions,
+# organization aermes-ai, repository expo-continued-task, workflow publish.yml.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm 11.5.1 or newer.
+      - run: npm install -g npm@latest
+      - name: Tag matches package.json
+        run: |
+          v=$(node -p "require('./package.json').version")
+          [ "v$v" = "$GITHUB_REF_NAME" ] || { echo "tag $GITHUB_REF_NAME != package.json v$v"; exit 1; }
+      - run: npm install --no-audit --no-fund --legacy-peer-deps
+      - run: npm test
+      - run: npm publish

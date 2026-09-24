@@ -13,6 +13,8 @@ Getting that to *actually keep running* took a lot of on-device measurement. Thi
 | **Memory pressure means expiry** | iOS expired the task 19–43 s after a memory-pressure warning, in every case we saw. Keep your units small. |
 | **Older iOS still works** | Without continued tasks, the unit in hand finishes under the ~30 s `beginBackgroundTask` grant, and the job stops cleanly at the boundary. |
 
+The measurements behind these rules are written up in [What iOS 26 background tasks actually do](https://blog.aermes.ai/blog/what-ios-26-background-tasks-actually-do/).
+
 Measured results: a job ran **45 minutes fully in the background** under one task. Time is variable, though: the same work got 6 minutes at night after a memory warning. Design for cut-and-resume.
 
 Try it in [`example/`](example/), a one-screen app that runs the package from source. To work on the package, see [CONTRIBUTING.md](CONTRIBUTING.md).
