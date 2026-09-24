@@ -1,6 +1,6 @@
 {
   "name": "@aermes/expo-continued-task",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "iOS 26 BGContinuedProcessingTask for Expo apps: long user-started work that keeps running after the user leaves, with the system progress banner — tap-only start, an honest bar, never \"Failed\", and a grace-grant fallback.",
   "main": "src/index.js",
   "types": "./types/index.d.ts",

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.1
 
 - `example/`: a one-screen Expo app that runs a 120-unit job with the system banner, notifications, and Start / Stop, using the package from source. CI builds it for the simulator.
 - `CONTRIBUTING.md`: the repository layout, how to run the tests, typecheck, Swift harness and example, and the rules a change must keep.
