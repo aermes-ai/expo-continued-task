@@ -1,0 +1,109 @@
+{
+  "name": "@aermes/expo-continued-task",
+  "version": "0.1.0",
+  "description": "iOS 26 BGContinuedProcessingTask for Expo apps: long user-started work that keeps running after the user leaves, with the system progress banner — tap-only start, an honest bar, never \"Failed\", and a grace-grant fallback.",
+  "main": "src/index.js",
+  "types": "./types/index.d.ts",
+  "license": "MIT",
+  "author": "Aermes",
+  "homepage": "https://github.com/aermes-ai/expo-continued-task#readme",
+  "bugs": {
+    "url": "https://github.com/aermes-ai/expo-continued-task/issues"
+  },
+  "keywords": [
+    "expo",
+    "react-native",
+    "ios",
+    "background",
+    "BGContinuedProcessingTask",
+    "BackgroundTasks"
+  ],
+  "peerDependencies": {
+    "expo": "*",
+    "expo-modules-core": "*"
+  },
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./native": {
+      "types": "./types/native.d.ts",
+      "default": "./src/native.js"
+    },
+    "./busy": {
+      "types": "./types/busy.d.ts",
+      "default": "./src/busy.js"
+    },
+    "./registry": {
+      "types": "./types/registry.d.ts",
+      "default": "./src/registry.js"
+    },
+    "./costBar": {
+      "types": "./types/costBar.d.ts",
+      "default": "./src/costBar.js"
+    },
+    "./createContinuedTask": {
+      "types": "./types/createContinuedTask.d.ts",
+      "default": "./src/createContinuedTask.js"
+    },
+    "./createContinuedJob": {
+      "types": "./types/createContinuedJob.d.ts",
+      "default": "./src/createContinuedJob.js"
+    },
+    "./createNotifier": {
+      "types": "./types/createNotifier.d.ts",
+      "default": "./src/createNotifier.js"
+    },
+    "./foregroundBridge": {
+      "types": "./types/foregroundBridge.d.ts",
+      "default": "./src/foregroundBridge.js"
+    },
+    "./graceOnlyJob": {
+      "types": "./types/graceOnlyJob.d.ts",
+      "default": "./src/graceOnlyJob.js"
+    },
+    "./app.plugin.js": "./app.plugin.js",
+    "./package.json": "./package.json",
+    "./examples/continuedJob": {
+      "types": "./types/examples/continuedJob.d.ts",
+      "default": "./src/examples/continuedJob.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aermes-ai/expo-continued-task"
+  },
+  "files": [
+    "src",
+    "!src/__tests__",
+    "types",
+    "!types/__typecheck__",
+    "!types/tsconfig.json",
+    "ios",
+    "app.plugin.js",
+    "ExpoContinuedTask.podspec",
+    "expo-module.config.json",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.29.0",
+    "babel-jest": "^30.2.0",
+    "jest": "^30.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "types/*"
+      ]
+    }
+  }
+}

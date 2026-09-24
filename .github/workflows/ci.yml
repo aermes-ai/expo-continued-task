@@ -1,0 +1,30 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund --legacy-peer-deps
+      - run: npm test
+      # The declarations are checked against the real React Native, expo-modules-core and expo-notifications types (the peers an app has).
+      - run: npm install --no-save --no-audit --no-fund typescript@5 react-native@0.81 expo-modules-core@3 expo-notifications@0.32
+      - run: npx tsc -p types/tsconfig.json
+      - run: npm pack --dry-run
+
+  native:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      # ContinuedTask.swift's real code against a fake BackgroundTasks, on a simulator.
+      - run: |
+          udid=$(xcrun simctl list devices available | grep -m1 -Eo 'iPhone[^(]*\(([0-9A-F-]{36})\)' | grep -Eo '[0-9A-F-]{36}')
+          xcrun simctl boot "$udid"
+          harness/run.sh "$udid"

@@ -1,0 +1,28 @@
+export {
+  isAvailable,
+  beginBackgroundTask,
+  releaseMinimiseGrant,
+  armMinimiseGrant,
+  cpuTimeMs,
+  endBackgroundTask,
+  remainingMs,
+  continuedSupported,
+  beginContinuedTask,
+  reportContinuedProgress,
+  retitleContinued,
+  canRetitleContinued,
+  endContinuedTask,
+  setContinuedEta,
+  continuedTaskState,
+  armContinuedAtResign,
+  takeResignSubmission,
+  default,
+} from './index';
+export type {
+  BeginContinuedTaskArgs,
+  ContinuedBeginResult,
+  ContinuedBridge,
+  ContinuedTaskState,
+  GraceBridge,
+  NativeBridge,
+} from './index';
