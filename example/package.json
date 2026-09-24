@@ -12,6 +12,7 @@
   "dependencies": {
     "@aermes/expo-continued-task": "file:..",
     "expo": "~54.0.33",
+    "expo-modules-core": "~3.0.30",
     "expo-notifications": "~0.32.16",
     "expo-status-bar": "~3.0.9",
     "react": "19.1.0",
