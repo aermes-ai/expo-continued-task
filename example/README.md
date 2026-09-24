@@ -13,6 +13,8 @@ npx expo prebuild -p ios
 npx expo run:ios --device
 ```
 
+`npm install` copies the package from `..` into `node_modules` (`install-links` in `.npmrc`), the way an app gets it from npm, so run it again after you change the package.
+
 `run:ios --device` asks which connected iPhone to use and signs with your team. The bundle id is `com.example.continuedtask`; change it in `app.json` (and `taskIdentifierPrefix` with it) if your team can't sign that id.
 
 ## What to expect
