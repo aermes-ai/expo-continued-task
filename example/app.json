@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "Continued Task Example",
+    "slug": "expo-continued-task-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "bundleIdentifier": "com.example.continuedtask",
+      "supportsTablet": false
+    },
+    "plugins": [
+      ["@aermes/expo-continued-task", { "taskIdentifierPrefix": "com.example.continuedtask.work" }],
+      "expo-notifications"
+    ]
+  }
+}

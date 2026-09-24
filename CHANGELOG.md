@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- `example/`: a one-screen Expo app that runs a 120-unit job with the system banner, notifications, and Start / Stop, using the package from source. CI builds it for the simulator.
+- `CONTRIBUTING.md`: the repository layout, how to run the tests, typecheck, Swift harness and example, and the rules a change must keep.
+- README: a Troubleshooting section (symptom, cause, fix).
+
 ## 0.1.0
 
 First public release. This is the code Aermes ships in its iOS app.
