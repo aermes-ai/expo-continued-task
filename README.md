@@ -15,6 +15,8 @@ Getting that to *actually keep running* took a lot of on-device measurement. Thi
 
 Measured results: a job ran **45 minutes fully in the background** under one task. Time is variable, though: the same work got 6 minutes at night after a memory warning. Design for cut-and-resume.
 
+Try it in [`example/`](example/), a one-screen app that runs the package from source. To work on the package, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Install
 
 ```sh
@@ -117,6 +119,22 @@ Everything the package **writes** — phase names, debug categories and events, 
   ```
 
 - Under Jest there is no native module: every native call is a no-op and `isAvailable` is `false`. Pass your own `bg` double to `createContinuedJob` (it takes the native functions as an argument) to test your job.
+
+## Troubleshooting
+
+Most answers are in the lifecycle log, a JSON line per event in the app's Documents folder: `expo-continued-task/continued.jsonl` by default (`logDirectory` / `logFileName`). Look for `submitted`, `submit_failed` (with a `reason`), `launched`, `expired` and `ended`.
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `isAvailable` is `false` on iOS | The native module isn't in the binary: running in Expo Go, or the dev client was built before the package was added. | Rebuild the native app (`npx expo prebuild`, then `npx expo run:ios` or an EAS build). Expo Go can't load it. |
+| `isAvailable` is `true` but `continuedSupported()` is `false` | The device is below iOS 26, or the app was built with Xcode older than 26 (the continued-task code is compiled out). | Build with Xcode 26 and run on iOS 26. Until then the job uses the grace grant only, which is expected. |
+| No banner; the log has `submit_failed` with `identifierNotPermitted` | The task's prefix isn't in `BGTaskSchedulerPermittedIdentifiers`: the plugin isn't in app config, the job's `taskPrefix` isn't the plugin's `taskIdentifierPrefix` or one of `extraTaskIdentifierPrefixes`, or the app wasn't rebuilt after changing them. | Put the prefix in the plugin options and rebuild. Check the built `Info.plist` lists `<prefix>.*`. |
+| No banner; the log has `submit_failed` with `submitFailed` | The task was submitted when it couldn't run right away, usually because it wasn't started from a tap with the app in front (at launch, from a timer, a push or the background). | Call `start()` only from a person's action with the app active. Tasks started any other way are refused, or launch and then get suspended. |
+| The banner shows "Failed" | Something completed the task with `success: false`. The package never does: every ending it makes is a success ("Paused" or your done line). Look for a direct `endContinuedTask(false)` call, or another library ending the same task. | End through the job (`stop()`) or `createContinuedTask().end()`. Never pass `false`. |
+| The task expires soon after a memory warning | iOS expired tasks 19–43 s after memory pressure in every case we measured. | Keep units small and memory flat (release images and buffers per unit). Design for cut-and-resume: the job pauses cleanly and `start()` carries on. |
+| The banner sits at 100 % and then the task expires | `size()` returned fewer units than `step()` actually does, so the bar thinks nothing is owed while work continues. iOS expires a task whose bar says it's finished. | Make `size()` return what's really owed, or `null` if you don't know yet (the bar then stays under 100 %). |
+| iOS asks "…is N% complete. Do you want to continue?" | The bar is moving slower than iOS expects, usually because `seedMs` is far off what a unit costs in the background. | Measure one unit in the background and use that as `seedMs`. The moving average corrects a close guess within a few units. |
+| Nothing happens on Android or in the simulator | iOS only. On Android every call is a no-op; the simulator has no continued tasks. | Use an iPhone on iOS 26. On the simulator you can still check the grace fallback: start, minimise, and the unit in hand finishes. |
 
 ## Limits
 

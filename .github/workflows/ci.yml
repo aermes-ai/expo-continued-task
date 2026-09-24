@@ -28,3 +28,28 @@ jobs:
           udid=$(xcrun simctl list devices available | grep -m1 -Eo 'iPhone[^(]*\(([0-9A-F-]{36})\)' | grep -Eo '[0-9A-F-]{36}')
           xcrun simctl boot "$udid"
           harness/run.sh "$udid"
+
+  example:
+    # The example app, built from the package source for the simulator: proves the config plugin,
+    # autolinking and the Swift compile in a real Expo SDK 54 app. The runner's default Xcode
+    # (16.x on macos-15) is new enough for SDK 54 (16.1+).
+    runs-on: macos-15
+    defaults:
+      run:
+        working-directory: example
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: xcodebuild -version
+      - run: npm install --no-audit --no-fund
+      - run: npx expo prebuild -p ios --no-install
+        env:
+          CI: 1
+      - run: pod install
+        working-directory: example/ios
+      - run: |
+          set -o pipefail
+          xcodebuild -workspace ios/*.xcworkspace -scheme ContinuedTaskExample -sdk iphonesimulator \
+            -configuration Debug -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tail -n 50
